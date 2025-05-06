@@ -1,13 +1,12 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import {init} from '../src/config/app'
+
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 3000
 const HOST = process.env.HOST || "localhost";
-init();
 
 app.get('/', (_req, res) => {
   res.send('Hello from MoltyAPI!')
