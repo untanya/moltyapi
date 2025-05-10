@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from "sequelize";
 
 // Option 2: Passing parameters separately (sqlite)
 const sequelize = new Sequelize({
@@ -15,3 +15,6 @@ export async function authenticate(){
     }
 }
 
+// voir si je dois faire une config et parametrage de sequilize.op
+// toutes les opérations faites par sequelize
+// sequlize.models je peux accéder à tous les models de sequelize (set, save, update)
