@@ -1,4 +1,0 @@
-dedans je dois mettre les modèles de chaques table de la bdd avec les types / if null or not 
-pour faire communiquer la base de données avec l'application.
-
-

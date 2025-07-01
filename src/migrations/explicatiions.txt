@@ -1,5 +1,0 @@
-dans sequelize je peux faire en sorte de faire un script qui me permet de générer ma base de données
-automatiquement.
-
-.sequelizerc : doit donner les infos sur le chemin des configs.
-donner le dialogue sqlite3
