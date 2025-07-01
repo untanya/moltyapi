@@ -6,6 +6,7 @@ import db from "../core/dbConnector";
 import { userTable } from "../db/schema";
 import { JWT } from "../helpers/jwt";
 import { signInSchema, signUpSchema } from "../types/auth";
+import { JWT } from "../helpers/jwt";
 
 const auth = new Hono();
 const jwt = new JWT();
