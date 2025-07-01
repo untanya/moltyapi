@@ -1,13 +1,72 @@
+import { zValidator } from "@hono/zod-validator";
 import { type Context, Hono } from "hono";
+import { signInSchema, signUpSchema } from "../types/auth";
 
 const auth = new Hono();
 
-auth.post("/signin", (c: Context) => {
-    return c.json({ success: true, message: "sign in !" });
+auth.post("/signin", zValidator("json", signInSchema), async (c) => {
+    try {
+        const { name, password } = c.req.valid("json");
+
+        if (name === "Viniew" && password === "mdptest") {
+            return c.json({
+                success: true,
+                message: "Sign in ok!",
+                token: "vrai token a mettre",
+            });
+        } else {
+            return c.json(
+                {
+                    success: false,
+                    message: "Invalid connection",
+                },
+                401,
+            );
+        }
+    } catch {
+        return c.json(
+            {
+                success: false,
+                message: "Servor error",
+            },
+            500,
+        );
+    }
 });
 
-auth.post("/signup", (c: Context) => {
-    return c.json({ success: true, message: "sign up !" });
+auth.post("/signup", zValidator("json", signUpSchema), async (c) => {
+    try {
+        const { name, email, password, passwordVerify } = c.req.valid("json");
+
+        if (
+            name === "Viniew" &&
+            email === "test@test.fr" &&
+            password === "testing123" &&
+            passwordVerify === "testing123"
+        ) {
+            return c.json({
+                success: true,
+                message: "Sign up is ok!",
+                token: "Token je te donne si je veux",
+            });
+        } else {
+            return c.json(
+                {
+                    success: false,
+                    message: "Invalid input",
+                },
+                401,
+            );
+        }
+    } catch {
+        return c.json(
+            {
+                success: false,
+                message: "Servor error",
+            },
+            500,
+        );
+    }
 });
 
 auth.post("/token/rotate", (c: Context) => {
