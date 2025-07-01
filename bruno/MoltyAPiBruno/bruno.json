@@ -1,0 +1,6 @@
+{
+    "version": "1",
+    "name": "MoltyAPiBruno",
+    "type": "collection",
+    "ignore": ["node_modules", ".git"]
+}
