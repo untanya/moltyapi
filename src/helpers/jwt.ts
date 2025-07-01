@@ -5,21 +5,21 @@ import type { JWTPayload } from "hono/utils/jwt/types";
 import { env } from "../core/config";
 
 export class JWT {
-    private publicKey: KeyObject;
-    private privateKey: KeyObject;
+    private publicKey: SignatureKey;
+    private privateKey: SignatureKey;
 
     constructor() {
-        this.publicKey = createPublicKey({
-            key: Buffer.from(env.JWT_PUBLIC_KEY, "base64"),
-            format: "der",
-            type: "spki",
-        });
+        this.publicKey = {
+            kty: "OKP",
+            crv: "Ed25519",
+            x: env.JWT_PUBLIC_KEY_X,
+        };
 
-        this.privateKey = createPrivateKey({
-            key: Buffer.from(env.JWT_PRIVATE_KEY, "base64"),
-            format: "der",
-            type: "pkcs8",
-        });
+        this.privateKey = {
+            kty: "OKP",
+            crv: "Ed25519",
+            d: env.JWT_PRIVATE_KEY_D,
+        };
     }
 
     public async sign(payload: {
