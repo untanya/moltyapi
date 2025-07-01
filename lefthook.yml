@@ -1,4 +1,6 @@
 pre-commit:
   commands:
     biome:
-      run: bun biome:write --staged
+      run: |
+        bun biome:write --staged
+        git add $(git diff --name-only)

@@ -1,4 +1,4 @@
-import app from "./app";
+import app from "./core/app";
 
 export default {
     port: 3000,

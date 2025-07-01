@@ -2,11 +2,11 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
+import auth from "../routes/auth";
+import conversation from "../routes/conversation";
+import message from "../routes/messages";
+import user from "../routes/users";
 import { env } from "./config";
-import auth from "./routes/auth";
-import conversation from "./routes/conversation";
-import message from "./routes/messages";
-import user from "./routes/users";
 
 const app = new Hono();
 
