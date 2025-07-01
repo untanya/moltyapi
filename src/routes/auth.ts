@@ -1,17 +1,19 @@
 import { Context, Hono } from "hono";
 import db from "../dbConnector";
 
-const app = new Hono()
+const auth = new Hono()
 
 
-app.get('/signin' ,(c: Context) => {
+auth.post('/signin' ,(c: Context) => {
   return c.json({ success: true, message: "sign in !" })
 })
 
-app.get('/signup', (c: Context) => {
+auth.post('/signup', (c: Context) => {
   return c.json({ success: true, message: "sign up !" })
 })
 
-app.get('/token/rotate', (c: Context) => {
+auth.post('/token/rotate', (c: Context) => {
   return c.json({ success: true, message: "rotated token !" })
 })
+
+export default auth;
