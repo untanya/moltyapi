@@ -1,8 +1,3 @@
-import { Hono } from 'hono'
-import 'dotenv/config';
-import { userTable } from './db/schema';
-import { eq } from 'drizzle-orm';
-
 // async function test() {
 //   const user: typeof userTable.$inferInsert = {
 //     name: "blabla",
@@ -28,6 +23,3 @@ import { eq } from 'drizzle-orm';
 //   console.log('User deleted!')
 
 // }
-
-
-

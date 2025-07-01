@@ -1,10 +1,9 @@
-import { Context, Hono } from "hono";
-import db from "../dbConnector";
+import { type Context, Hono } from "hono";
 
-const user = new Hono()
+const user = new Hono();
 
-user.get('/users', (c: Context) => {
-    return c.json({ success: true, message: "fetch users !" })
-})
+user.get("/users", (c: Context) => {
+    return c.json({ success: true, message: "fetch users !" });
+});
 
 export default user;
