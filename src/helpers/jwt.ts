@@ -1,4 +1,3 @@
-import { createPrivateKey, createPublicKey, type KeyObject } from "node:crypto";
 import { decode, sign, verify } from "hono/jwt";
 import type { SignatureKey } from "hono/utils/jwt/jws";
 import type { JWTPayload } from "hono/utils/jwt/types";
