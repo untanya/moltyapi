@@ -17,5 +17,18 @@ export const signUpSchema = z
         path: ["passwordVerify"],
     });
 
+export const jwtPayloadSchema = z
+    .object({
+        sub: z.string(),
+        name: z.string(),
+        iat: z.number().int().min(0),
+        exp: z.number().int().min(0),
+    })
+    .refine(
+        ({ iat, exp }) => iat <= exp,
+        "invalid range, iat is greater than exp",
+    );
+
 export type signinType = z.infer<typeof signInSchema>;
 export type signupType = z.infer<typeof signUpSchema>;
+export type jwtPayloadType = z.infer<typeof jwtPayloadSchema>;
