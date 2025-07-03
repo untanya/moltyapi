@@ -14,6 +14,7 @@ type Variables = JwtVariables;
 
 const app = new Hono<{ Variables: Variables }>();
 
+// Middlewares
 app.use(logger());
 app.use(cors());
 if (env.AUTH_ENABLED === "true") {
@@ -22,13 +23,13 @@ if (env.AUTH_ENABLED === "true") {
 
 app.use();
 
-app.get("/", (c) => {
-    return c.json(env);
-});
+// Test route
+app.get("/", (c) => c.json(env));
 
-app.route("/auth", auth);
-app.route("/", conversation);
-app.route("/", message);
-app.route("/auth", user);
+// Routes
+app.route("/auth", auth); // /auth/signin, /auth/signup
+app.route("/conversations", conversation); // /conversations/*
+app.route("/messages", message); // /messages/*
+app.route("/users", user); // /users/* (par ex. GET /users)
 
 export default app;
