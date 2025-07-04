@@ -11,11 +11,20 @@ export const conversationTable = sqliteTable("conversations", {
     ...timestamp,
 });
 
+export const refreshTokenTable = sqliteTable("refresh_tokens", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    refresh_token: text().notNull(),
+    ...timestamp,
+});
+
 export const userTable = sqliteTable("users", {
     id: integer().primaryKey({ autoIncrement: true }),
     name: text().notNull().unique(),
     email: text().notNull().unique(),
     password: text().notNull(),
+    token: integer()
+        .notNull()
+        .references(() => refreshTokenTable.id),
     ...timestamp,
 });
 
@@ -30,12 +39,6 @@ export const messageTable = sqliteTable("messages", {
     id_conversations: integer()
         .notNull()
         .references(() => conversationTable.id),
-});
-
-export const refreshTokenTable = sqliteTable("refresh_tokens", {
-    id: integer().primaryKey({ autoIncrement: true }),
-    refresh_token: text().notNull(),
-    ...timestamp,
 });
 
 export const isInTable = sqliteTable("is_in", {
