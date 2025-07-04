@@ -9,11 +9,11 @@ const BaseSchema = z.object({
     id_conversations: z.number(),
 });
 
-export const CreateMessageSchema = z.object({
-    content: z.string(),
-    id_users: z.number(),
-    id_conversations: z.number(),
-});
+export const CreateMessageSchema = BaseSchema.pick({
+    content: true,
+    id_users: true,
+    id_conversations: true,
+}).loose();
 
 export const MessageSchema = z.intersection(BaseSchema, Timestamp);
 

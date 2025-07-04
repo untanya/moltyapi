@@ -8,6 +8,7 @@ const timestamp = {
 
 export const conversationTable = sqliteTable("conversations", {
     id: integer().primaryKey({ autoIncrement: true }),
+    name: text().notNull().unique(),
     ...timestamp,
 });
 
