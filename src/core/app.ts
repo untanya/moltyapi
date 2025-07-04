@@ -21,8 +21,6 @@ if (env.AUTH_ENABLED === "true") {
     app.use("*", authMiddleware);
 }
 
-app.use();
-
 // Test route
 app.get("/", (c) => c.json(env));
 
