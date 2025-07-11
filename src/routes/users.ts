@@ -4,10 +4,15 @@ import { userTable } from "../db/schema";
 
 const user = new Hono();
 
-// ⛳️ Le chemin devient juste "/"
-user.get("/", async (c: Context) => {
+user.get("/data", async (c: Context) => {
     try {
-        const users = await db.select().from(userTable);
+        const users = await db
+            .select({
+                id: userTable.id,
+                username: userTable.name,
+                created_at: userTable.created_at,
+            })
+            .from(userTable);
 
         return c.json({
             success: true,

@@ -18,14 +18,19 @@ export const refreshTokenTable = sqliteTable("refresh_tokens", {
     ...timestamp,
 });
 
+export const deviceTokenTable = sqliteTable("device_tokens", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    device_token: text().notNull(),
+    ...timestamp,
+});
+
 export const userTable = sqliteTable("users", {
     id: integer().primaryKey({ autoIncrement: true }),
     name: text().notNull().unique(),
     email: text().notNull().unique(),
     password: text().notNull(),
-    token: integer()
-        .notNull()
-        .references(() => refreshTokenTable.id),
+    token: integer().references(() => refreshTokenTable.id),
+    device_token: integer().references(() => deviceTokenTable.id),
     ...timestamp,
 });
 
