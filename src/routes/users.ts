@@ -1,24 +1,36 @@
+import { eq } from "drizzle-orm";
 import { type Context, Hono } from "hono";
 import db from "../core/dbConnector";
-import { userTable } from "../db/schema";
+import { deviceTokenTable, userTable } from "../db/schema";
 
 const user = new Hono();
 
-user.get("/data", async (c: Context) => {
+user.get("/data/:id", async (c: Context) => {
     try {
-        const users = await db
-            .select({
-                id: userTable.id,
-                username: userTable.name,
-                created_at: userTable.created_at,
-            })
-            .from(userTable);
+        const id = !Number.isInteger(c.req.param("id"))
+            ? Number(c.req.param("id"))
+            : undefined;
 
-        return c.json({
-            success: true,
-            message: "You get all your users!",
-            data: users,
-        });
+        if (id) {
+            const users = await db
+                .select({
+                    id: userTable.id,
+                    username: userTable.name,
+                    deviceToken: deviceTokenTable.deviceToken,
+                    created_at: userTable.created_at,
+                })
+                .from(userTable)
+                .rightJoin(
+                    deviceTokenTable,
+                    eq(deviceTokenTable.user_id, userTable.id),
+                )
+                .where(eq(userTable.id, id));
+
+            return c.json({
+                success: true,
+                data: users,
+            });
+        }
     } catch (error) {
         console.error("Fetch users error:", error);
         return c.json(
