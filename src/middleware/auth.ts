@@ -17,10 +17,10 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
     }
 
     const accessToken = authHeader.replace("Bearer ", "");
-    const { sign, decode, verify } = new JWT();
+    const jwt = new JWT();
 
     try {
-        const payload = await verify(accessToken);
+        const payload = await jwt.verify(accessToken);
         c.set("user", payload);
         return await next();
     } catch {
@@ -29,11 +29,11 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 
         try {
             // On parse même access_token invalide pour en extraire le payload.sub (userId)
-            refreshPayload = await verify(accessToken); // si partiellement décodable malgré invalide (sinon on fallback)
+            refreshPayload = await jwt.verify(accessToken); // si partiellement décodable malgré invalide (sinon on fallback)
         } catch {
             // fallback brut : on décode pour extraire sub
             try {
-                const { payload } = decode(accessToken);
+                const { payload } = jwt.decode(accessToken);
                 refreshPayload = payload;
             } catch {
                 return c.json(
@@ -73,7 +73,7 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 
         // ✅ Génération d’un nouveau access_token
         const now = Math.floor(Date.now() / 1000);
-        const newAccessToken = await sign({
+        const newAccessToken = await jwt.sign({
             sub: String(row.userId),
             name: row.userName,
             iat: now,

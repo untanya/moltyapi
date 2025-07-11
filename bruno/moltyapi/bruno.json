@@ -1,0 +1,8 @@
+{
+    "version": "1",
+    "name": "moltyapi",
+    "type": "collection",
+    "ignore": ["node_modules", ".git"],
+    "size": 0.0021295547485351562,
+    "filesCount": 16
+}

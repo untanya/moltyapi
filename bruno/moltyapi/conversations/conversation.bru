@@ -1,0 +1,15 @@
+meta {
+  name: conversation
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{DEV}}/conversations/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

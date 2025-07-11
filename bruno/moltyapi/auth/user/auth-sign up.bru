@@ -1,0 +1,20 @@
+meta {
+  name: auth/sign up
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{DEV}}/auth/user/signup
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Léopold",
+    "email": "leopold@mail.com",
+    "password": "12345678",
+    "passwordVerify": "12345678"
+  }
+}

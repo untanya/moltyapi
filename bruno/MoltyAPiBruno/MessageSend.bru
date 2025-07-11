@@ -1,0 +1,21 @@
+meta {
+  name: MessageSend
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:3000/message/send
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "content": "Hello world!",
+    "id_users": 1,
+    "id_conversations": 1
+  }
+  
+  
+}

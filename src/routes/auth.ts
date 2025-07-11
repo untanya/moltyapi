@@ -1,16 +1,16 @@
 import { zValidator } from "@hono/zod-validator";
 import bcrypt from "bcryptjs";
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { Hono } from "hono";
 import db from "../core/dbConnector";
-import { refreshTokenTable, userTable } from "../db/schema";
+import { deviceTokenTable, refreshTokenTable, userTable } from "../db/schema";
 import { JWT } from "../helpers/jwt";
-import { signInSchema, signUpSchema } from "../types/auth";
+import { deviceSignUpSchema, signInSchema, signUpSchema } from "../types/auth";
 
 const auth = new Hono();
 const jwt = new JWT();
 
-auth.post("/signin", zValidator("json", signInSchema), async (c) => {
+auth.post("/user/signin", zValidator("json", signInSchema), async (c) => {
     try {
         const { name, password } = c.req.valid("json");
 
@@ -61,7 +61,7 @@ auth.post("/signin", zValidator("json", signInSchema), async (c) => {
     }
 });
 
-auth.post("/signup", zValidator("json", signUpSchema), async (c) => {
+auth.post("/user/signup", zValidator("json", signUpSchema), async (c) => {
     try {
         const { name, email, password, passwordVerify } = c.req.valid("json");
 
@@ -87,11 +87,20 @@ auth.post("/signup", zValidator("json", signUpSchema), async (c) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const now = Math.floor(Date.now() / 1000);
 
+        const [newUser] = await db
+            .insert(userTable)
+            .values({
+                name,
+                email,
+                password: hashedPassword,
+            })
+            .returning();
+
         const refreshToken = await jwt.sign({
-            sub: "0", // on itnitialise a zéro pour l'instant
+            sub: newUser.id.toString(),
             exp: now + 60 * 60 * 24 * 7, // 7 jours
             iat: now,
-            name: "",
+            name: newUser.name,
         });
 
         const [refreshTokenEntry] = await db
@@ -99,15 +108,9 @@ auth.post("/signup", zValidator("json", signUpSchema), async (c) => {
             .values({ refresh_token: refreshToken })
             .returning({ id: refreshTokenTable.id });
 
-        const [newUser] = await db
-            .insert(userTable)
-            .values({
-                name,
-                email,
-                password: hashedPassword,
-                token: refreshTokenEntry.id,
-            })
-            .returning();
+        await db.update(userTable).set({
+            token: refreshTokenEntry.id,
+        });
 
         const accessToken = await jwt.sign({
             sub: newUser.id.toString(),
@@ -127,5 +130,65 @@ auth.post("/signup", zValidator("json", signUpSchema), async (c) => {
         return c.json({ success: false, message: "Server error" }, 500);
     }
 });
+
+auth.post(
+    "/device/signup",
+    zValidator("json", deviceSignUpSchema),
+    async (c) => {
+        try {
+            const { user_id, token, platform, device_name, app_version } =
+                c.req.valid("json");
+
+            const existingUser = await db
+                .select()
+                .from(userTable)
+                .where(eq(userTable.id, Number(user_id)));
+
+            if (existingUser.length === 0) {
+                return c.json(
+                    { success: false, message: "User doesn't exists" },
+                    409,
+                );
+            }
+
+            const existingDevice = await db
+                .select()
+                .from(deviceTokenTable)
+                .where(
+                    and(
+                        eq(deviceTokenTable.user_id, Number(user_id)),
+                        eq(deviceTokenTable.deviceName, device_name),
+                    ),
+                );
+
+            if (existingDevice.length > 0) {
+                await db
+                    .update(deviceTokenTable)
+                    .set({
+                        deviceToken: token,
+                        platform,
+                        appVersion: app_version,
+                    })
+                    .where(eq(deviceTokenTable.id, existingDevice[0].id));
+            } else {
+                await db.insert(deviceTokenTable).values({
+                    user_id: Number(user_id),
+                    deviceToken: token,
+                    platform,
+                    deviceName: device_name,
+                    appVersion: app_version,
+                });
+            }
+
+            return c.json({
+                success: true,
+                message: "Device registered successfully!",
+            });
+        } catch (e) {
+            console.error("signup error", e);
+            return c.json({ success: false, message: "Server error" }, 500);
+        }
+    },
+);
 
 export default auth;

@@ -8,6 +8,7 @@ const timestamp = {
 
 export const conversationTable = sqliteTable("conversations", {
     id: integer().primaryKey({ autoIncrement: true }),
+    name: text().notNull().unique(),
     ...timestamp,
 });
 
@@ -17,14 +18,22 @@ export const refreshTokenTable = sqliteTable("refresh_tokens", {
     ...timestamp,
 });
 
+export const deviceTokenTable = sqliteTable("device_tokens", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    user_id: integer().references(() => userTable.id),
+    deviceToken: text("device_token").notNull(),
+    platform: text().notNull(),
+    deviceName: text("device_name").notNull(),
+    appVersion: text("app_version").notNull(),
+    ...timestamp,
+});
+
 export const userTable = sqliteTable("users", {
     id: integer().primaryKey({ autoIncrement: true }),
     name: text().notNull().unique(),
     email: text().notNull().unique(),
     password: text().notNull(),
-    token: integer()
-        .notNull()
-        .references(() => refreshTokenTable.id),
+    token: integer().references(() => refreshTokenTable.id),
     ...timestamp,
 });
 

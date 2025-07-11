@@ -1,8 +1,8 @@
 import * as z from "zod/v4";
 
 export const signInSchema = z.object({
-    name: z.string().min(4),
-    password: z.string().min(6),
+    name: z.string().min(3),
+    password: z.string().min(8),
 });
 
 export const signUpSchema = z
@@ -16,6 +16,14 @@ export const signUpSchema = z
         message: "Passwords do not match",
         path: ["passwordVerify"],
     });
+
+export const deviceSignUpSchema = z.object({
+    user_id: z.number().min(1),
+    token: z.string(),
+    platform: z.string(),
+    device_name: z.string(),
+    app_version: z.string(),
+});
 
 export const jwtPayloadSchema = z
     .object({
@@ -32,3 +40,4 @@ export const jwtPayloadSchema = z
 export type signinType = z.infer<typeof signInSchema>;
 export type signupType = z.infer<typeof signUpSchema>;
 export type jwtPayloadType = z.infer<typeof jwtPayloadSchema>;
+export type deviceSignupType = z.infer<typeof deviceSignUpSchema>;

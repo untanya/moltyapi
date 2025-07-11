@@ -9,6 +9,13 @@ const BaseSchema = z.object({
     id_conversations: z.number(),
 });
 
+export const CreateMessageSchema = BaseSchema.pick({
+    content: true,
+    id_users: true,
+    id_conversations: true,
+}).loose();
+
 export const MessageSchema = z.intersection(BaseSchema, Timestamp);
 
 export type MessageType = z.infer<typeof MessageSchema>;
+export type CreateMessageType = z.infer<typeof CreateMessageSchema>;

@@ -1,0 +1,21 @@
+meta {
+  name: auth/device/sign up
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{DEV}}/auth/device/signup
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id": 2,
+    "token": "ExponentPushToken[abcdefg1234567]",
+    "platform": "android",
+    "device_name": "Pixel 7 Pro",
+    "app_version": "1.4.0"
+  }
+}
