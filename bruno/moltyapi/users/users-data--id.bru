@@ -1,0 +1,15 @@
+meta {
+  name: users/data/:id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{DEV}}/users/data/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 2
+}
