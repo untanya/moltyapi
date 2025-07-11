@@ -1,8 +1,8 @@
 import * as z from "zod/v4";
 
 export const signInSchema = z.object({
-    name: z.string().min(4),
-    password: z.string().min(6),
+    name: z.string().min(3),
+    password: z.string().min(8),
 });
 
 export const signUpSchema = z
