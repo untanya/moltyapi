@@ -17,6 +17,14 @@ export const signUpSchema = z
         path: ["passwordVerify"],
     });
 
+export const deviceSignUpSchema = z.object({
+    user_id: z.number().min(1),
+    token: z.string(),
+    platform: z.string(),
+    device_name: z.string(),
+    app_version: z.string(),
+});
+
 export const jwtPayloadSchema = z
     .object({
         sub: z.string(),
@@ -32,3 +40,4 @@ export const jwtPayloadSchema = z
 export type signinType = z.infer<typeof signInSchema>;
 export type signupType = z.infer<typeof signUpSchema>;
 export type jwtPayloadType = z.infer<typeof jwtPayloadSchema>;
+export type deviceSignupType = z.infer<typeof deviceSignUpSchema>;

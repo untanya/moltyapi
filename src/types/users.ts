@@ -7,7 +7,6 @@ const BaseSchema = z.object({
     email: z.email(),
     password: z.string(),
     token: z.number().min(1),
-    deviceToken: z.number().min(1),
 });
 
 export const UserSchema = z.intersection(BaseSchema, Timestamp);

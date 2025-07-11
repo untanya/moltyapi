@@ -20,7 +20,11 @@ export const refreshTokenTable = sqliteTable("refresh_tokens", {
 
 export const deviceTokenTable = sqliteTable("device_tokens", {
     id: integer().primaryKey({ autoIncrement: true }),
-    device_token: text().notNull(),
+    user_id: integer().references(() => userTable.id),
+    deviceToken: text("device_token").notNull(),
+    platform: text().notNull(),
+    deviceName: text("device_name").notNull(),
+    appVersion: text("app_version").notNull(),
     ...timestamp,
 });
 
@@ -30,7 +34,6 @@ export const userTable = sqliteTable("users", {
     email: text().notNull().unique(),
     password: text().notNull(),
     token: integer().references(() => refreshTokenTable.id),
-    device_token: integer().references(() => deviceTokenTable.id),
     ...timestamp,
 });
 
