@@ -41,7 +41,13 @@ message.get("/:id", async (c: Context) => {
         : undefined;
     if (id) {
         const message = await db
-            .select()
+            .select({
+                id: messageTable.id,
+                content: messageTable.content,
+                conversation_id: messageTable.id_conversations,
+                from: messageTable.id_users,
+                created_at: messageTable.created_at,
+            })
             .from(messageTable)
             .where(eq(messageTable.id, id));
         return c.json(message);
@@ -56,7 +62,15 @@ message.get("/:id", async (c: Context) => {
 });
 
 message.get("/", async (c: Context) => {
-    const message = await db.select().from(messageTable);
+    const message = await db
+        .select({
+            id: messageTable.id,
+            content: messageTable.content,
+            conversation_id: messageTable.id_conversations,
+            from: messageTable.id_users,
+            created_at: messageTable.created_at,
+        })
+        .from(messageTable);
     return c.json({ success: true, data: message });
 });
 
