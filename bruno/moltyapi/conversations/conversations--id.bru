@@ -1,0 +1,15 @@
+meta {
+  name: conversations/:id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{DEV}}/conversations/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}

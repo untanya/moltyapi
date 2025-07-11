@@ -1,0 +1,19 @@
+meta {
+  name: message/send
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{DEV}}/messages/send
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "content": "ET MOI Men in the middle?",
+      "id_users": 2,
+      "id_conversations": 3
+  }
+}
